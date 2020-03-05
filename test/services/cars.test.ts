@@ -1,37 +1,50 @@
-import assert from 'assert';
-import app from '../../src/app';
+import assert from "assert";
+import app from "../../src/app";
 
-describe('\'cars\' service', () => {
-  it('registered the service', () => {
-    const service = app.service('cars');
+describe("'cars' service", () => {
+  it("registered the service", () => {
+    const service = app.service("cars");
 
-    assert.ok(service, 'Registered the service');
+    assert.ok(service, "Registered the service");
   });
 
-  it('Validates vin# and saves car in db', async () => {
-    const service = app.service('cars');
+  it("Validates vin# and saves car in db", async () => {
+    const service = app.service("cars");
     let mustang = {
-      make: 'ford',
-      model: 'mustang',
+      make: "ford",
+      model: "mustang",
       year: 1970,
-      vin: '123456789ABCDFGJF'
-    }
-    const car = await service.create(mustang)
+      vin: "123456789ABCDFGJF"
+    };
+    const car = await service.create(mustang);
     assert.equal(car.vin, mustang.vin);
   });
 
-
-  it('finds car by its id', async () => {
-    const service = app.service('cars');
+  it("Throws invalid request error when VIN# is invalid", async () => {
+    const service = app.service("cars");
     let mustang = {
-      make: 'ford',
-      model: 'mustang',
+      make: "ford",
+      model: "mustang",
       year: 1970,
-      vin: '123456789ABCDFGJF'
+      vin: "123456789ABCDEFGJFG"
+    };
+    try {
+      const car = await service.create(mustang);
+    } catch (e) {
+      assert.ok(e, "Car was not created due to invalid VIN#");
     }
-    const newCar = await service.create(mustang);
-    const car = service.find(newCar.id)
-    assert.ok(car, 'Found car by its id');
   });
 
+  it("finds car by its id", async () => {
+    const service = app.service("cars");
+    let mustang = {
+      make: "ford",
+      model: "mustang",
+      year: 1970,
+      vin: "123456789ABCDFGJF"
+    };
+    const newCar = await service.create(mustang);
+    const car = service.find(newCar.id);
+    assert.ok(car, "Found car by its id");
+  });
 });

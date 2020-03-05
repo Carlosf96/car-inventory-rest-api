@@ -29,8 +29,6 @@ export default function (app: Application) {
     }
   };
 
-
-
   const reader = fs.createReadStream(
     path.resolve(__dirname + "/MOCK_DATA.csv")
   );
