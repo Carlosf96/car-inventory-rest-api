@@ -1,10 +1,11 @@
 
+import validateCars from '../../hooks/validate-cars';
 export default {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [validateCars()],
     update: [],
     patch: [],
     remove: []
